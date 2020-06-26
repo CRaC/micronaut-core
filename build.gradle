@@ -546,6 +546,11 @@ ext {
                 group  : 'io.micronaut.jaxrs',
                 modules: ['micronaut-jaxrs-server', 'micronaut-jaxrs-processor']
             ],
+            crac: [
+                    version:"999-SNAPSHOT",
+                    group:"org.crac",
+                    name:"crac",
+            ],
     ]
 
     dependencyVersion = { String name ->

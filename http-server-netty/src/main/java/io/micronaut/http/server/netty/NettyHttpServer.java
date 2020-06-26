@@ -71,6 +71,9 @@ import io.netty.util.concurrent.Future;
 import io.netty.util.concurrent.GlobalEventExecutor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.crac.Resource;
+import org.crac.Context;
+import org.crac.Core;
 
 import javax.annotation.Nullable;
 import javax.inject.Inject;
@@ -95,7 +98,7 @@ import java.util.function.BiConsumer;
  */
 @Singleton
 @Internal
-public class NettyHttpServer implements EmbeddedServer, WebSocketSessionRepository {
+public class NettyHttpServer implements EmbeddedServer, WebSocketSessionRepository, Resource {
     public static final String HTTP_STREAMS_CODEC = "http-streams-codec";
     public static final String HTTP_CHUNKED_HANDLER = "http-chunked-handler";
     @SuppressWarnings("WeakerAccess")
@@ -375,6 +378,7 @@ public class NettyHttpServer implements EmbeddedServer, WebSocketSessionReposito
                     }
                 }
             }
+            Core.getGlobalContext().register(this);
             fireStartupEvents();
             running.set(true);
         }
@@ -390,6 +394,19 @@ public class NettyHttpServer implements EmbeddedServer, WebSocketSessionReposito
             }
         }
         return this;
+    }
+
+    @Override
+    public void beforeCheckpoint(Context<? extends Resource> context) throws InterruptedException {
+        if (running.compareAndSet(true, false)) {
+            parentGroup.shutdownGracefully()
+                .addListener(this::logShutdownErrorIfNecessary);
+        }
+    }
+
+    @Override
+    public void afterRestore(Context<? extends Resource> context) {
+	start();
     }
 
     @Override

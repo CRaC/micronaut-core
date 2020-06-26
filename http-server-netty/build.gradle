@@ -1,3 +1,13 @@
+repositories {
+    maven {
+        url "https://maven.pkg.github.com/org-crac/org.crac"
+        credentials {
+            username = System.getenv("GITHUB_ACTOR")
+            password = System.getenv("GITHUB_TOKEN")
+        }
+    }
+}
+
 dependencies {
     annotationProcessor project(":inject-java")
 
@@ -5,6 +15,7 @@ dependencies {
     api project(":core")
     api project(":http-netty")
     api dependencyVersion("netty")
+    api dependencyVersion("crac")
 
     compileOnly dependencyModuleVersion("netty", "netty-transport-native-epoll")
     compileOnly dependencyModuleVersion("netty", "netty-transport-native-kqueue")
