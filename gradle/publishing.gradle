@@ -79,14 +79,11 @@ publishing {
         repositories {
             maven {
                 credentials {
-                    def bintrayUser = System.getenv("BINTRAY_USER") ?: project.hasProperty("bintrayUser") ? project.bintrayUser : ''
-                    def bintrayKey = System.getenv("BINTRAY_KEY") ?: project.hasProperty("bintrayKey") ? project.bintrayKey : ''
-
-                    username = bintrayUser
-                    password = bintrayKey
+                    username = System.getenv("GITHUB_ACTOR")
+                    password = System.getenv("GITHUB_TOKEN")
                 }
-                url  "https://oss.jfrog.org/oss-snapshot-local"
-            }
+                url  "https://maven.pkg.github.com/org-crac/micronaut-core"
+	    }
         }
 
         publications {
@@ -304,7 +301,7 @@ and progress through process manually -> Close -> Publish ... under staging repo
         }
     }
 }
-
+/*
 if (!project.version.endsWith("-SNAPSHOT")) {
     // disable remote publish for non-snapshot versions
     // since releases are published to bintray
@@ -312,3 +309,4 @@ if (!project.version.endsWith("-SNAPSHOT")) {
         task.enabled = false
     }
 }
+*/
