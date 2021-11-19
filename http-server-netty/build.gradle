@@ -5,6 +5,7 @@ dependencies {
     api project(":core")
     api project(":http-netty")
     api dependencyVersion("netty")
+    api group: 'io.github.crac', name: 'org-crac', version: '0.1.0'
 
     compileOnly dependencyModuleVersion("netty", "netty-transport-native-epoll")
     compileOnly dependencyModuleVersion("netty", "netty-transport-native-kqueue")
